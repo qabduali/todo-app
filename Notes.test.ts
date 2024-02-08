@@ -9,11 +9,15 @@ describe('Notes', () => {
     notes = new Notes();
   });
 
-  test('Creating a new note should add it to the notes list', () => {
-    const newNote = notes.create({ note: 'Test note' });
+  test.each([
+    ['Test note 1'],
+    ['Test note 2'],
+    ['Test note 3'],
+  ])('Creating a new note with content %s should add it to the notes list', (noteContent) => {
+    const newNote = notes.create({ note: noteContent });
     expect(newNote).toMatchObject({
       id: 1,
-      note: 'Test note',
+      note: noteContent,
     });
   });
 
@@ -31,7 +35,11 @@ describe('Notes', () => {
   });
 
   test('Updating a note should modify the note content and update the timestamp', () => {
-    const newNote = notes.create({ note: 'Test note' });
+
+    const newNote = notes.create({ note: 'Test note'});
+    // Create newNote with old created_at and updated_at, assert that the updated_at is different after updating the note
+    newNote.created_at = +(new Date('2024-01-08T12:00:00Z'))
+    newNote.updated_at = +(new Date('2024-01-08T12:00:00Z'))
     const newNoteUpdatedAt = +new Date(newNote.updated_at);
     const updatedNote = notes.update(newNote.id, 'Updated test note') as Note;
     expect(updatedNote).toMatchObject({
@@ -39,7 +47,6 @@ describe('Notes', () => {
       note: 'Updated test note',
     });
     const updatedNoteUpdatedAt = +new Date(updatedNote.updated_at);
-
     expect(updatedNoteUpdatedAt).not.toEqual(newNoteUpdatedAt);
   });
 
