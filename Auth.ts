@@ -12,6 +12,10 @@ let LoggedInUser: User | null = null;
 class FakeAuth {
   private static users: User[] = [];
 
+  static clearUsers(): void {
+    this.users = [];
+  }
+
   static Register(user: Omit<User, 'id'>): User | string {
     if (this.users.some(u => u.login === user.login)) {
       return 'User already exists.';
@@ -24,6 +28,7 @@ class FakeAuth {
   static Login(login: string, password: string): string {
     const user = this.users.find(u => u.login === login && u.password === password);
     if (!user) {
+      LoggedInUser = null;
       return 'Login failed.';
     }
     LoggedInUser = user;

@@ -2,12 +2,12 @@
 
 import { LoggedInUser } from "./Auth";
 
-type Note = {
+export type Note = {
     id: number;
     userId?: number;
     note: string;
-    created_at: string; // Consider using Date type for real applications
-    updated_at: string; // Consider using Date type for real applications
+    created_at: number; // Consider using Date type for real applications
+    updated_at: number; // Consider using Date type for real applications
   };
   
   class Notes {
@@ -18,8 +18,8 @@ type Note = {
       const newNote: Note = {
         ...note,
         id: this.notes.length + 1,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        created_at: +new Date(),
+        updated_at: +new Date(),
       };
       this.notes.push(newNote);
       return newNote;
@@ -47,7 +47,7 @@ type Note = {
         return 'You are not authorized to edit this note.';
       }
       this.notes[index].note = note;
-      this.notes[index].updated_at = new Date().toISOString();
+      this.notes[index].updated_at = +new Date();
       return this.notes[index];
     }
 
